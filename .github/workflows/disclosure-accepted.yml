@@ -153,3 +153,30 @@ jobs:
           HUNTR_HELPER_PIPELINE_TOKEN: ${{ secrets.HUNTR_HELPER_PIPELINE_TOKEN }}
           VULNERABILITY_JSON: ${{ needs.get-vulnerability-json.outputs.vulnerability-json }}
         run: node create-branch.js
+
+  send-email:
+    name: Send email notification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: node-setup
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - id: restore-node-cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-trusted-${{ hashFiles('**/package-lock.json') }}
+      - id: dependency-install
+        name: Install npm dependencies
+        run: npm ci
+      - id: run-create-branch
+        name: Run create-branch.js
+        env:
+          USER_ID: ${{ github.event.pull_request.user.id }}
+          GRAPHQL_API_URL: ${{ secrets.GRAPHQL_API_URL }}
+          GRAPHQL_API_KEY: ${{ secrets.GRAPHQL_API_KEY }}
+          MAILJET_API_KEY: ${{ secrets.MAILJET_API_KEY }}
+          MAILJET_API_SECRET: ${{ secrets.MAILJET_API_SECRET }}
+        run: node email.js

@@ -11,6 +11,8 @@
   "type": "module",
   "dependencies": {
     "@actions/core": "^1.2.6",
-    "heap-api": "^1.0.1"
+    "graphql-request": "^3.4.0",
+    "heap-api": "^1.0.1",
+    "node-mailjet": "^3.3.1"
   }
 }
