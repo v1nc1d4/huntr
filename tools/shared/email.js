@@ -16,12 +16,12 @@ query getUserEmail($Nickname: String!) {
 }
 `);
 
-const variables = {
+const getUserEmailVariables = {
   Nickname: process.env.USER_ID,
 };
 
 const userEmail = await graphQLClient
-  .request(getUserEmailQuery, variables)
+  .request(getUserEmailQuery, getUserEmailVariables)
   .then((response) => response.getUserEmail)
   .catch((error) => {
     core.setFailed(
